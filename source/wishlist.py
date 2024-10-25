@@ -40,10 +40,17 @@ def generate_wishlist_html_from_excel(file_path):
             }}
             
             .wishlist-container {{
+                display:block;
+                
                 margin: 0 auto;
                 max-width: 70em;
                 border: 1px solid #ccc;
                 padding: 1em;
+                width: 100%;
+                height: auto;
+                position: relative;
+                overflow: hidden;
+                
             }}
             
             .wishlist-item {{
@@ -60,7 +67,12 @@ def generate_wishlist_html_from_excel(file_path):
             .wishlist-item img {{
                 display: block;
                 max-width: 15em;
+                max-height: 10em;
                 margin-right: 1em;
+                width: auto;
+                height: auto;
+
+
             }}
             
             .wishlist-item a {{
