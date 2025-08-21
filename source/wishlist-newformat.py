@@ -99,13 +99,16 @@ def generate_wishlist_html_from_excel(file_path):
     for index, item in enumerate(items):
         if item['reserved'] == 'Y':
             continue  # Skip reserved items
-        
+        if item['price']:
+            item_price = item['price']
+        else:    
+            item_price = "n/a"
         if item['name']:
             item_name = item['name']
         else:
 #           item_name = get_page_title(item['link'])
             item_name = item['link']
-        if item['image']:
+        if item['image'] and item['link']:
             html += """
                 <div class="wishlist-item">
                     <img src="{item_image}" alt="wishlist-item">
@@ -116,20 +119,32 @@ def generate_wishlist_html_from_excel(file_path):
             item_image=item['image'],
             item_link=item['link'],
             item_name=item_name,
-            item_price=item['price']
+            item_price=item_price
             )
         else:
-            html += """
-                <div class="wishlist-item">
-                    <img>
-                    <a href="{item_link}" target="_blank">{item_name}</a>
-                    <div class="price">{item_price}</div>
-                </div>
-            """.format(
-            item_link=item['link'],
-            item_name=item_name,
-            item_price=item['price']
-            )
+            if item['link']:
+                html += """
+                    <div class="wishlist-item">
+                        <img>
+                        <a href="{item_link}" target="_blank">{item_name}</a>
+                        <div class="price">{item_price}</div>
+                    </div>
+                """.format(
+                item_link=item['link'],
+                item_name=item_name,
+                item_price=item_price
+                )
+            else:
+                html += """
+                    <div class="wishlist-item">
+                        <img>
+                        <a href=# target="_self">{item_name}</a>
+                        <div class="price">{item_price}</div>
+                    </div>
+                """.format(
+                item_name=item_name,
+                item_price=item_price
+                )
             
         
     html += """
