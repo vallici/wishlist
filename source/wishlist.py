@@ -154,7 +154,9 @@ def generate_wishlist_html_from_excel(file_path):
                     )
         else:
             html += """
-                n/a"""
+                <span style="color: #F527A3">
+                n/a
+                </span>"""
         html += """
             </div>
             <div class="wishlist-name">"""
@@ -198,8 +200,9 @@ def generate_wishlist_html_from_excel(file_path):
                     )
         else:
             html += """
-            
+                <span style="color: #F527A3">
                 n/a
+                </span>
                 """
         html += """
             </div></div>"""
