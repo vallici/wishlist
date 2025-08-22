@@ -23,11 +23,10 @@ def generate_wishlist_html_from_excel(file_path):
         }
         items.append(item)
 
-    html = """
-     <!DOCTYPE html>
+    html = """<!DOCTYPE html>
     <html>
     <head>
-        <title>Clara's Wishlist</title>
+        <title>{sheet_name}</title>
         <style>
             body {{
             
@@ -162,7 +161,9 @@ def generate_wishlist_html_from_excel(file_path):
         if item['link'] and item['name']:
             html += """
                 <a href="{item_link}" target="_blank">
+                
                     {item_name}
+                    
                 </a>""".format(
                     item_link = item['link'],
                     item_name = item['name']
@@ -171,7 +172,9 @@ def generate_wishlist_html_from_excel(file_path):
             if item['link']:
                 html += """
                     <a href="{item_link}" target="_blank" >
+                    
                         {item_link}
+                        
                     </a>""".format(
                     item_link = item['link'],
                     )
@@ -188,12 +191,16 @@ def generate_wishlist_html_from_excel(file_path):
             <div class="wishlist-price">"""
         if item['price']:
             html += """
-                {item_price}""".format(
+            
+                {item_price}
+                """.format(
                     item_price = item['price']
                     )
         else:
             html += """
-                n/a"""
+            
+                n/a
+                """
         html += """
             </div></div>"""
         
