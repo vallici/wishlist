@@ -63,9 +63,7 @@ def generate_wishlist_html_from_excel(file_path):
                 background-color: #f9f9f9;
                 
             }}
-			
-
-            
+			            
             .wishlist-item:nth-child(even) {{
             
                 background-color: #e9e9e9;
@@ -76,7 +74,6 @@ def generate_wishlist_html_from_excel(file_path):
             
                 display:table-cell;
 				width: 15em;
-                height: 10em;
 				min-witdh: 15em;
 				vertical-align: middle;
 				position: relative;
@@ -140,73 +137,100 @@ def generate_wishlist_html_from_excel(file_path):
         <div class="wishlist-container">
         """.format(sheet_name=sheet_name)
 
+    ### Set an error color
+    
+    error_color = "#F527A3"
+    normal_color = "#000000"
+    
+    ### Set opacity levels
+    reserved_opacity = "0.3"
+    normal_opacity = "1"
+    
+    ### Set height levels
+    gap_height = "4em"
+    normal_height = "10em"
+    
+    ### Set an error text
+    na_text = "n/a"
+    na_formatted_text = "<span style = \"color: " + error_color + "\">" + na_text + "</span>"
+    
+    ### Set the extra backgroud color modifier
+    
+    bkg_color = " background-color: #ccbddb;"
+      
     for index, item in enumerate(items):
-        if item['reserved'] == 'Y':
-            continue  # Skip reserved items
         
-        html += """
-            <div class="wishlist-item">
-                <div class="wishlist-image">"""
+        ### Set the background color to default before evaluating if this is a gap
+        html_bkg = ""
+        
+        ### Check items in the list
+        
+        ### Check if the image exists
         if item['image']:
-            html += """
-                <img src="{item_image}" alt="missing image">""".format(
-                    item_image=item['image']
-                    )
+            html_image = """<img src=""" + item['image'] + """ alt="missing image">"""
         else:
-            html += """
-                <span style="color: #F527A3">
-                n/a
-                </span>"""
-        html += """
-            </div>
-            <div class="wishlist-name">"""
-        if item['link'] and item['name']:
-            html += """
-                <a href="{item_link}" target="_blank">
-                
-                    {item_name}
-                    
-                </a>""".format(
-                    item_link = item['link'],
-                    item_name = item['name']
-                    )
-        else:
-            if item['link']:
-                html += """
-                    <a href="{item_link}" target="_blank" >
-                    
-                        {item_link}
-                        
-                    </a>""".format(
-                    item_link = item['link'],
-                    )
-            else:
-                html += """
-                    {item_name} 
-                    <span style="color: #F527A3">
-                    (no link)
-                        </span>""".format(
-                    item_name = item['name'],
-                    )
-        html += """
-            </div>
-            <div class="wishlist-price">"""
-        if item['price']:
-            html += """
-            
-                {item_price}
-                """.format(
-                    item_price = item['price']
-                    )
-        else:
-            html += """
-                <span style="color: #F527A3">
-                n/a
-                </span>
-                """
-        html += """
-            </div></div>"""
+            html_image = na_formatted_text
         
+        ### Check if the price exists
+        if item['price']:
+            html_price = item['price']
+        else:
+            html_price = na_formatted_text
+        
+        ### Check if the link and the name both exist
+        if item['link'] and item['name']:
+            html_name = """<a href=""" + item['link'] + """ target="_blank"> """ + item['name'] + "</a>"
+        else:
+            ### If just the link is there, but no item name
+            if item['link']:
+                html_name = """<a href=""" + item['link'] + """ target="_blank"></a>"""
+            else:
+                if item['name']:
+                    ### If just the item name is there, but no item link
+                    html_name = item['name'] + """<span style="color: {error_color}"> (no link) </span>""".format(error_color = error_color)
+                else:
+                    html_name = na_formatted_text
+                    
+        ### Check if the item is reserved or marked as a gap
+        if item['reserved'] == "Y":
+            html_opacity = reserved_opacity
+        else:
+            html_opacity = normal_opacity
+            html_height = normal_height
+        
+        if item['reserved'] == "GAP":
+            html_bkg = bkg_color
+            html_height = gap_height
+            html_price = ""
+            html_image = ""
+            html_name = ""
+                 
+        html += """
+            <div class="wishlist-item" style="opacity: {html_opacity}; height: {html_height};{html_bkg}">
+                <div class="wishlist-image">
+                    
+                    {html_image}
+
+                </div>
+                <div class="wishlist-name">
+                
+                    {html_name}
+                
+                </div>
+                <div class="wishlist-price">
+                
+                    {html_price}
+                
+                </div>
+            </div>""".format(
+                        html_bkg = html_bkg,
+                        html_opacity = html_opacity,
+                        html_height = html_height,
+                        html_image = html_image,
+                        html_name = html_name,
+                        html_price = html_price
+                        )
+   
 
     html += """
         </div>
