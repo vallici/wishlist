@@ -160,6 +160,10 @@ def generate_wishlist_html_from_excel(file_path):
       
     for index, item in enumerate(items):
         
+        ### Check if it needs to skip the item
+        if item['reserved'] == "SKIP":
+            continue
+        
         ### Set the background color to default before evaluating if this is a gap
         html_bkg = ""
         
@@ -194,6 +198,8 @@ def generate_wishlist_html_from_excel(file_path):
         ### Check if the item is reserved or marked as a gap
         if item['reserved'] == "Y":
             html_opacity = reserved_opacity
+            html_height = normal_height
+
         else:
             html_opacity = normal_opacity
             html_height = normal_height
