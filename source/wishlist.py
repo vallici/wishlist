@@ -164,6 +164,9 @@ def generate_wishlist_html_from_excel(file_path):
         if item['reserved'] == "SKIP":
             continue
         
+        if not item['name'] and  not item['link'] and  not item['image'] and not item['reserved']:
+            continue
+        
         ### Set the background color to default before evaluating if this is a gap
         html_bkg = ""
         
